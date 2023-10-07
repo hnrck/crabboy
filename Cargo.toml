@@ -2,7 +2,7 @@
 name = "crabboy"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "GB emulator in rust, based on bgb documentation found in http://bgb.bircd.org"
 
 [dependencies]
+clap = { version = "4.4.6", features = ["derive"] }
