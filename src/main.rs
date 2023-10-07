@@ -1,10 +1,105 @@
 use std::fs;
-
 use clap::Parser;
+
 
 #[derive(Clone)]
 struct Memory {
     data: Vec<u8>,
+}
+
+#[derive(Copy, Clone)]
+enum MemorySection {
+    Rom,
+    VRam,
+    ExternalRam,
+    InternalRam,
+    Oam,
+    IoPorts,
+    HRam,
+}
+
+impl MemorySection {
+    pub fn size(&self) -> usize {
+        match self {
+            MemorySection::Rom => 0x8000,
+            MemorySection::VRam => 0x2000,
+            MemorySection::ExternalRam => 0x2000,
+            MemorySection::InternalRam => 0x2000,
+            MemorySection::Oam => 0xA0,
+            MemorySection::IoPorts => 0x80,
+            MemorySection::HRam => 0x80,
+        }
+    }
+
+    pub fn range(&self) -> (u16, u16) {
+        let start = match self {
+            MemorySection::Rom => 0x0000,
+            MemorySection::VRam => 0x8000,
+            MemorySection::ExternalRam => 0xA000,
+            MemorySection::InternalRam => 0xC000,
+            MemorySection::Oam => 0xFE00,
+            MemorySection::IoPorts => 0xFF00,
+            MemorySection::HRam => 0xFF80,
+        };
+
+        let end = start + (self.size() as u16 - 1);
+        (start, end)
+    }
+
+    pub fn contains(&self, addr: u16) -> bool {
+        let (start, end) = self.range();
+        addr >= start && addr <= end
+    }
+}
+
+struct MMU {
+    rom: Memory,
+    vram: Memory,
+    external_ram: Memory,
+    internal_ram: Memory,
+    oam: Memory,
+    io_ports: Memory,
+    hram: Memory,
+}
+
+impl MMU {
+    pub fn new() -> MMU {
+        MMU {
+            rom: Memory { data: vec![0; MemorySection::Rom.size()] },
+            vram: Memory { data: vec![0; MemorySection::VRam.size()] },
+            external_ram: Memory { data: vec![0; MemorySection::ExternalRam.size()] },
+            internal_ram: Memory { data: vec![0; MemorySection::InternalRam.size()] },
+            oam: Memory { data: vec![0; MemorySection::Oam.size()] },
+            io_ports: Memory { data: vec![0; MemorySection::IoPorts.size()] },
+            hram: Memory { data: vec![0; MemorySection::HRam.size()] },
+        }
+    }
+
+    pub fn read_byte(&self, addr: u16) -> u8 {
+        match addr {
+            _ if MemorySection::Rom.contains(addr) => self.rom.data[addr as usize],
+            _ if MemorySection::VRam.contains(addr) => self.vram.data[(addr - 0x8000) as usize],
+            _ if MemorySection::ExternalRam.contains(addr) => self.external_ram.data[(addr - 0xA000) as usize],
+            _ if MemorySection::InternalRam.contains(addr) => self.internal_ram.data[(addr - 0xC000) as usize],
+            _ if MemorySection::Oam.contains(addr) => self.oam.data[(addr - 0xFE00) as usize],
+            _ if MemorySection::IoPorts.contains(addr) => self.io_ports.data[(addr - 0xFF00) as usize],
+            _ if MemorySection::HRam.contains(addr) => self.hram.data[(addr - 0xFF80) as usize],
+            _ => 0,
+        }
+    }
+
+    pub fn write_byte(&mut self, addr: u16, value: u8) {
+        match addr {
+            _ if MemorySection::Rom.contains(addr) => self.rom.data[addr as usize] = value,
+            _ if MemorySection::VRam.contains(addr) => self.vram.data[(addr - 0x8000) as usize] = value,
+            _ if MemorySection::ExternalRam.contains(addr) => self.external_ram.data[(addr - 0xA000) as usize] = value,
+            _ if MemorySection::InternalRam.contains(addr) => self.internal_ram.data[(addr - 0xC000) as usize] = value,
+            _ if MemorySection::Oam.contains(addr) => self.oam.data[(addr - 0xFE00) as usize] = value,
+            _ if MemorySection::IoPorts.contains(addr) => self.io_ports.data[(addr - 0xFF00) as usize] = value,
+            _ if MemorySection::HRam.contains(addr) => self.hram.data[(addr - 0xFF80) as usize] = value,
+            _ => (),
+        }
+    }
 }
 
 trait MemoryTrait {
@@ -301,7 +396,6 @@ impl Rom {
         println!("----------------");
     }
 }
-
 
 #[derive(Parser)]
 #[clap(version = env!("CARGO_PKG_VERSION"), author = env!("CARGO_PKG_AUTHORS"), about = env!("CARGO_PKG_DESCRIPTION"))]
