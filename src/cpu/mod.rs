@@ -32,6 +32,7 @@ impl CPU {
     }
 
     pub(crate) fn step(&mut self, mmu: &mut MMU) {
+        println!("{:?}", self.registers);
         let byte = self.fetch(mmu);
         println!("Fetch:   @0x{:0>4x} -> 0x{:0>2x}", self.registers.pc, byte);
         let opcode = self.decode(byte);
@@ -40,5 +41,6 @@ impl CPU {
         // TODO(henrick) update program counter, handle interrupts, etc.
         println!("Execute: {:?} : {} bytes", opcode, bytes);
         self.registers.pc += bytes as u16;
+        println!("---");
     }
 }

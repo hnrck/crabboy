@@ -1,8 +1,21 @@
+use std::fmt;
+
 pub struct Flags {
     pub(crate) z: bool,
     pub(crate) n: bool,
     pub(crate) h: bool,
     pub(crate) c: bool,
+}
+
+impl fmt::Debug for Flags {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Flags")
+            .field("z", &format_args!("{}", self.z as u8))
+            .field("n", &format_args!("{}", self.n as u8))
+            .field("h", &format_args!("{}", self.h as u8))
+            .field("c", &format_args!("{}", self.c as u8))
+            .finish()
+    }
 }
 
 impl Flags {
@@ -34,6 +47,23 @@ pub struct Registers {
     pub(crate) l: u8,
     pub(crate) pc: u16,
     pub(crate) sp: u16,
+}
+
+impl fmt::Debug for Registers {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Registers")
+            .field("a", &format_args!("0x{:02X}", self.a))
+            .field("f", &self.f)
+            .field("b", &format_args!("0x{:02X}", self.b))
+            .field("c", &format_args!("0x{:02X}", self.c))
+            .field("d", &format_args!("0x{:02X}", self.d))
+            .field("e", &format_args!("0x{:02X}", self.e))
+            .field("h", &format_args!("0x{:02X}", self.h))
+            .field("l", &format_args!("0x{:02X}", self.l))
+            .field("pc", &format_args!("0x{:04X}", self.pc))
+            .field("sp", &format_args!("0x{:04X}", self.sp))
+            .finish()
+    }
 }
 
 impl Registers {
