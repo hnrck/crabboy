@@ -1,7 +1,7 @@
 use crate::types::Memory;
 use crate::types::MemorySection;
 
-struct MMU {
+pub struct MMU {
     rom: Memory,
     vram: Memory,
     external_ram: Memory,

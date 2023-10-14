@@ -2,6 +2,7 @@ mod mmu;
 mod types;
 mod cartridge;
 mod rom;
+mod cpu;
 
 use clap::Parser;
 use crate::rom::Rom;
