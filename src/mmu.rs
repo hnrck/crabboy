@@ -1,3 +1,4 @@
+use crate::rom::Rom;
 use crate::types::Memory;
 use crate::types::MemorySection;
 
@@ -21,6 +22,13 @@ impl MMU {
             oam: Memory { data: vec![0; MemorySection::Oam.size()] },
             io_ports: Memory { data: vec![0; MemorySection::IoPorts.size()] },
             hram: Memory { data: vec![0; MemorySection::HRam.size()] },
+        }
+    }
+
+    pub(crate) fn with_rom(self, rom: Rom) -> Self {
+        MMU {
+            rom: rom.memory,
+            ..self
         }
     }
 

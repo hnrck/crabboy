@@ -10,8 +10,8 @@ use crate::cartridge::CGBFlag;
 use crate::cartridge::SGBFlag;
 use crate::cartridge::DestinationCode;
 
-pub(crate) struct Rom {
-    memory: Memory,
+pub struct Rom {
+    pub(crate) memory: Memory,
     header: CartridgeHeader,
 }
 
