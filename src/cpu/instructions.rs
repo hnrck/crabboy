@@ -4,7 +4,7 @@ use crate::cpu::registers::Registers;
 
 pub type ExecuteFn = fn(&mut Registers, &mut MMU) -> bool;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub(crate) struct Instruction {
     pub(crate) mnemonic: &'static str,
     pub(crate) execute: ExecuteFn,
@@ -39,42 +39,21 @@ impl Instruction {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Opcode {
-    // 0x0_
-    Nop,
-    // 0xC_
-    //    0
-    //    1
-    //    2
-    JpA16,
-}
-
-impl Opcode {
-    pub(crate) fn from_byte(byte: u8) -> Opcode {
-        match byte {
-            0x00 => Opcode::Nop,
-            0xc3 => Opcode::JpA16,
-            _ => panic!("Unknown opcode: {:X}", byte),
-        }
-    }
-}
-
 fn jp_execute(registers: &mut Registers, address: u16) {
     registers.pc = address
 }
 
-pub(crate) fn initialize_opcodes_instructions_map() -> HashMap<Opcode, Instruction> {
-    let mut opcode_instructions = HashMap::new();
+pub(crate) fn initialize_instructions_map() -> HashMap<u8, Instruction> {
+    let mut instructions_map = HashMap::new();
 
-    opcode_instructions.insert(
-        Opcode::Nop, Instruction::new(
+    instructions_map.insert(
+        0x00, Instruction::new(
             "NOP", |_registers, _memory| { true }, 1,
         ),
     );
 
-    opcode_instructions.insert(
-        Opcode::JpA16, Instruction::new(
+    instructions_map.insert(
+        0xc3, Instruction::new(
             "JP A16", |registers, memory| {
                 jp_execute(registers, memory.read_word(registers.pc + 1));
                 true
@@ -82,6 +61,6 @@ pub(crate) fn initialize_opcodes_instructions_map() -> HashMap<Opcode, Instructi
         ).with_bytes(0),
     );
 
-    opcode_instructions
+    instructions_map
 }
 
