@@ -43,14 +43,18 @@ fn jp_execute(registers: &mut Registers, address: u16) {
     registers.pc = address
 }
 
-pub(crate) fn initialize_instructions_map() -> HashMap<u8, Instruction> {
-    let mut instructions_map = HashMap::new();
-
+fn instructions_map_control_commands(instructions_map: &mut HashMap<u8, Instruction>) -> () {
     instructions_map.insert(
         0x00, Instruction::new(
             "NOP", |_registers, _memory| { true }, 1,
         ),
     );
+}
+
+pub(crate) fn initialize_instructions_map() -> HashMap<u8, Instruction> {
+    let mut instructions_map = HashMap::new();
+
+    instructions_map_control_commands(&mut instructions_map);
 
     instructions_map.insert(
         0xc3, Instruction::new(
