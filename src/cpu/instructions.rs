@@ -39,10 +39,6 @@ impl Instruction {
     }
 }
 
-fn jp_execute(registers: &mut Registers, address: u16) {
-    registers.pc = address
-}
-
 fn instructions_map_control_commands(instructions_map: &mut HashMap<u8, Instruction>) -> () {
     instructions_map.insert(
         0x00, Instruction::new(
@@ -51,19 +47,24 @@ fn instructions_map_control_commands(instructions_map: &mut HashMap<u8, Instruct
     );
 }
 
-pub(crate) fn initialize_instructions_map() -> HashMap<u8, Instruction> {
-    let mut instructions_map = HashMap::new();
-
-    instructions_map_control_commands(&mut instructions_map);
+fn instructions_map_jump_commands(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+    fn jp(registers: &mut Registers, address: u16) { registers.pc = address }
 
     instructions_map.insert(
         0xc3, Instruction::new(
             "JP A16", |registers, memory| {
-                jp_execute(registers, memory.read_word(registers.pc + 1));
+                jp(registers, memory.read_word(registers.pc + 1));
                 true
             }, 16,
         ).with_bytes(0),
     );
+}
+
+pub(crate) fn initialize_instructions_map() -> HashMap<u8, Instruction> {
+    let mut instructions_map = HashMap::new();
+
+    instructions_map_control_commands(&mut instructions_map);
+    instructions_map_jump_commands(&mut instructions_map);
 
     instructions_map
 }
