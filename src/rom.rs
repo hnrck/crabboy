@@ -1,14 +1,14 @@
 use std::fs;
-use crate::types::Memory;
-use crate::types::MemoryTrait;
 
-use crate::cartridge::CartridgeType;
 use crate::cartridge::CartridgeHeader;
+use crate::cartridge::CartridgeType;
+use crate::cartridge::CGBFlag;
+use crate::cartridge::DestinationCode;
 use crate::cartridge::RamSize;
 use crate::cartridge::RomSize;
-use crate::cartridge::CGBFlag;
 use crate::cartridge::SGBFlag;
-use crate::cartridge::DestinationCode;
+use crate::types::Memory;
+use crate::types::MemoryTrait;
 
 pub struct Rom {
     pub(crate) memory: Memory,

@@ -1,13 +1,14 @@
+use clap::Parser;
+
+use crate::cpu::CPU;
+use crate::mmu::MMU;
+use crate::rom::Rom;
+
 mod mmu;
 mod types;
 mod cartridge;
 mod rom;
 mod cpu;
-
-use clap::Parser;
-use crate::mmu::MMU;
-use crate::rom::Rom;
-use crate::cpu::CPU;
 
 #[derive(Parser)]
 #[clap(version = env!("CARGO_PKG_VERSION"), author = env!("CARGO_PKG_AUTHORS"), about = env!("CARGO_PKG_DESCRIPTION"))]

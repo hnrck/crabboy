@@ -1,10 +1,11 @@
+use std::collections::HashMap;
+
+use crate::cpu::instructions::{initialize_instructions_map, Instruction};
+use crate::cpu::registers::{CpuState, Registers};
+use crate::mmu::MMU;
+
 mod instructions;
 mod registers;
-
-use std::collections::HashMap;
-use crate::mmu::MMU;
-use crate::cpu::registers::Registers;
-use crate::cpu::instructions::{Instruction, initialize_instructions_map};
 
 pub(crate) struct CPU {
     registers: Registers,
@@ -25,28 +26,33 @@ impl CPU {
         self.instructions_map.get(&byte).cloned()
     }
 
-    fn execute(&mut self, instruction: &Instruction, mmu: &mut MMU) -> u8 {
-        match (instruction.execute)(&mut self.registers, mmu) {
-            true => instruction.cycles_taken,
-            false => instruction.cycles_not_taken.unwrap_or(instruction.cycles_taken),
+    fn execute(&mut self, instruction: &Instruction, mmu: &mut MMU) -> (bool, u8) {
+        let (pc_update, action_taken) = (instruction.execute)(&mut self.registers, mmu);
+        match action_taken {
+            true => (pc_update, instruction.cycles.taken),
+            false => (pc_update, instruction.cycles.not_taken),
         }
     }
 
     pub(crate) fn step(&mut self, mmu: &mut MMU) {
         println!("{:?}", self.registers);
 
-        let pc = self.registers.pc;
-        let byte = self.fetch(mmu);
-        println!("Fetch:   @0x{:0>4x} -> 0x{:0>2x}", pc, byte);
+        if self.registers.cpu_state == CpuState::Running {
+            let pc = self.registers.pc;
+            let byte = self.fetch(mmu);
+            println!("Fetch:   @0x{:0>4x} -> 0x{:0>2x}", pc, byte);
 
-        let instruction = self.decode(byte).expect("Unknown instruction");
-        println!("Decode:  0x{:0>2x} = {:?}", byte, instruction.mnemonic);
+            let instruction = self.decode(byte).expect("Unknown instruction");
+            println!("Decode:  0x{:0>2x} = {:?}", byte, instruction.mnemonic);
 
-        let cycles = self.execute(&instruction, mmu);
+            let (pc_update, cycles) = self.execute(&instruction, mmu);
 
-        println!("Execute: {:?} : {} cycles", instruction.mnemonic, cycles);
+            println!("Execute: {:?} : {} cycles", instruction.mnemonic, cycles);
 
-        self.registers.pc += instruction.bytes as u16;
+            if pc_update {
+                self.registers.pc += instruction.bytes as u16;
+            }
+        }
 
         println!("---");
     }

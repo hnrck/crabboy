@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::cpu::registers::CpuState::Running;
+
 pub struct Flags {
     pub(crate) z: bool,
     pub(crate) n: bool,
@@ -28,12 +30,21 @@ impl Flags {
         value
     }
 
-    fn set_flags(&mut self, value: u8) {
-        self.z = (value & 0b1000_0000) != 0;
-        self.n = (value & 0b0100_0000) != 0;
-        self.h = (value & 0b0010_0000) != 0;
-        self.c = (value & 0b0001_0000) != 0;
+    fn from_u8(value: u8) -> Self {
+        Flags {
+            z: (value & 0b1000_0000) != 0,
+            n: (value & 0b0100_0000) != 0,
+            h: (value & 0b0010_0000) != 0,
+            c: (value & 0b0001_0000) != 0,
+        }
     }
+}
+
+#[derive(PartialEq)]
+pub(crate) enum CpuState {
+    Running,
+    Halted,
+    Stopped,
 }
 
 pub struct Registers {
@@ -47,6 +58,8 @@ pub struct Registers {
     pub(crate) l: u8,
     pub(crate) pc: u16,
     pub(crate) sp: u16,
+    pub(crate) interrupts_enabled: bool,
+    pub(crate) cpu_state: CpuState,
 }
 
 impl fmt::Debug for Registers {
@@ -79,6 +92,52 @@ impl Registers {
             l: 0,
             pc: 0x0100,
             sp: 0,
+            interrupts_enabled: false,
+            cpu_state: Running,
         }
+    }
+
+    pub fn get_af(&self) -> u16 {
+        ((self.a as u16) << 8) | (self.f.as_u8() as u16)
+    }
+
+    pub fn set_af(&mut self, value: u16) {
+        self.a = ((value >> 8) & 0xFF) as u8;
+        self.f = Flags::from_u8((value & 0xFF) as u8);
+    }
+
+    pub fn get_bc(&self) -> u16 {
+        ((self.b as u16) << 8) | (self.c as u16)
+    }
+
+    pub fn set_bc(&mut self, value: u16) {
+        self.b = ((value >> 8) & 0xFF) as u8;
+        self.c = (value & 0xFF) as u8;
+    }
+
+    pub fn get_de(&self) -> u16 {
+        ((self.d as u16) << 8) | (self.e as u16)
+    }
+
+    pub fn set_de(&mut self, value: u16) {
+        self.d = ((value >> 8) & 0xFF) as u8;
+        self.e = (value & 0xFF) as u8;
+    }
+
+    pub fn get_hl(&self) -> u16 {
+        ((self.h as u16) << 8) | (self.l as u16)
+    }
+
+    pub fn set_hl(&mut self, value: u16) {
+        self.h = ((value >> 8) & 0xFF) as u8;
+        self.l = (value & 0xFF) as u8;
+    }
+
+    pub fn enable_interrupts(&mut self) {
+        self.interrupts_enabled = true
+    }
+
+    pub fn disable_interrupts(&mut self) {
+        self.interrupts_enabled = false
     }
 }
