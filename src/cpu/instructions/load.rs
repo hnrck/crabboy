@@ -10,8 +10,6 @@ pub(super) fn instructions_map_load_instructions(instructions_map: &mut HashMap<
 }
 
 fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
-    fn ld(from: &u8, to: &mut u8) { *to = *from; }
-
     instructions_map.insert(
         0x02, Instruction::new(
             "LD (BC), A", |registers, memory| {
@@ -785,18 +783,169 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
     );
 }
 
-fn instructions_map_16_bit_load_instructions(_instructions_map: &mut HashMap<u8, Instruction>) -> () {
-    fn ld(from: &u16, to: &mut u16) { *to = *from; }
+fn instructions_map_16_bit_load_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+    instructions_map_16_bit_load_ld_instructions(instructions_map);
+    instructions_map_16_bit_load_pop_instructions(instructions_map);
+    instructions_map_16_bit_load_push_instructions(instructions_map);
+}
 
-    fn pop(registers: &mut Registers, memory: &MMU, to: &mut u16) {
-        *to = memory.read_word(registers.sp);
+fn instructions_map_16_bit_load_ld_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+    instructions_map.insert(
+        0x01, Instruction::new(
+            "LD BC, d16", |registers, memory| {
+                registers.set_bc(memory.read_word(registers.pc + 1));
+                (true, true)
+            }, Cycles::new(12), 3,
+        ),
+    );
+
+    instructions_map.insert(
+        0x11, Instruction::new(
+            "LD DE, d16", |registers, memory| {
+                registers.set_de(memory.read_word(registers.pc + 1));
+                (true, true)
+            }, Cycles::new(12), 3,
+        ),
+    );
+
+    instructions_map.insert(
+        0x21, Instruction::new(
+            "LD HL, d16", |registers, memory| {
+                registers.set_hl(memory.read_word(registers.pc + 1));
+                (true, true)
+            }, Cycles::new(12), 3,
+        ),
+    );
+
+    instructions_map.insert(
+        0x31, Instruction::new(
+            "LD SP, d16", |registers, memory| {
+                memory.write_word(registers.sp, memory.read_word(registers.pc + 1));
+                (true, true)
+            }, Cycles::new(12), 3,
+        ),
+    );
+
+    instructions_map.insert(
+        0x08, Instruction::new(
+            "LD (a16), SP", |registers, memory| {
+                memory.write_word(memory.read_word(registers.pc + 1), registers.sp);
+                (true, true)
+            }, Cycles::new(20), 3,
+        ),
+    );
+
+    instructions_map.insert(
+        0xF8, Instruction::new(
+            "LD HL, SP+r8", |registers, memory| {
+                let r8 = memory.read_byte(registers.pc + 1) as i16;
+                let sp = registers.sp as i16;
+                let sp_plus_r8 = sp.wrapping_add(r8);
+                registers.f.h = ((sp & 0x0F) + (r8 & 0x0F)) & 0x10 != 0;
+                registers.f.c = ((sp as u16) + (r8 as u16)) & 0x100 != 0;
+                registers.set_hl(sp_plus_r8 as u16);
+                (true, true)
+            }, Cycles::new(12), 2,
+        ),
+    );
+
+    instructions_map.insert(
+        0xF9, Instruction::new(
+            "LD SP, HL", |registers, memory| {
+                memory.write_word(registers.sp, registers.get_hl());
+                (true, true)
+            }, Cycles::new(8), 1,
+        ),
+    );
+}
+
+fn instructions_map_16_bit_load_pop_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+    fn pop(registers: &mut Registers, memory: &MMU) -> u16 {
+        let sp = memory.read_word(registers.sp);
+        registers.sp += 2;
+        sp
+    }
+
+    instructions_map.insert(
+        0xC1, Instruction::new(
+            "POP BC", |registers, memory| {
+                let d16 = pop(registers, memory);
+                registers.set_bc(d16);
+                (true, true)
+            }, Cycles::new(12), 1,
+        ),
+    );
+
+    instructions_map.insert(
+        0xD1, Instruction::new(
+            "POP DE", |registers, memory| {
+                let d16 = pop(registers, memory);
+                registers.set_de(d16);
+                (true, true)
+            }, Cycles::new(12), 1,
+        ),
+    );
+
+    instructions_map.insert(
+        0xE1, Instruction::new(
+            "POP HL", |registers, memory| {
+                let d16 = pop(registers, memory);
+                registers.set_hl(d16);
+                (true, true)
+            }, Cycles::new(12), 1,
+        ),
+    );
+
+    instructions_map.insert(
+        0xF1, Instruction::new(
+            "POP AF", |registers, memory| {
+                let d16 = pop(registers, memory);
+                registers.set_af(d16);
+                (true, true)
+            }, Cycles::new(12), 1,
+        ),
+    );
+}
+
+fn instructions_map_16_bit_load_push_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+    fn push(registers: &mut Registers, memory: &mut MMU, d16: u16) {
+        memory.write_word(registers.sp, d16);
         registers.sp += 2;
     }
 
-    fn push(registers: &mut Registers, memory: &mut MMU, from: &u16) {
-        memory.write_word(registers.sp, *from);
-        registers.sp += 2;
-    }
+    instructions_map.insert(
+        0xC5, Instruction::new(
+            "PUSH BC", |registers, memory| {
+                push(registers, memory, registers.get_bc());
+                (true, true)
+            }, Cycles::new(16), 1,
+        ),
+    );
 
-    // TODO(henrick) Implementation
+    instructions_map.insert(
+        0xD5, Instruction::new(
+            "PUSH DE", |registers, memory| {
+                push(registers, memory, registers.get_de());
+                (true, true)
+            }, Cycles::new(16), 1,
+        ),
+    );
+
+    instructions_map.insert(
+        0xE5, Instruction::new(
+            "PUSH HL", |registers, memory| {
+                push(registers, memory, registers.get_hl());
+                (true, true)
+            }, Cycles::new(16), 1,
+        ),
+    );
+
+    instructions_map.insert(
+        0xF5, Instruction::new(
+            "PUSH AF", |registers, memory| {
+                push(registers, memory, registers.get_af());
+                (true, true)
+            }, Cycles::new(16), 1,
+        ),
+    );
 }
