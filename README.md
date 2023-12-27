@@ -2,6 +2,32 @@
 
 Simple and stupid GB emulator in Rust.
 
+## Usage
+
+### Build
+
+```bash
+cargo build --release --package crabboy --bin crabboy
+```
+
+### Run
+
+```bash
+cargo run --release --package crabboy --bin crabboy -- --rom <path/to/a/homemade/rom.gb>
+```
+
+## TODO
+
+A lot:
+
+* `Prefix CB` implementation
+* Debug/Release
+* Logs
+* IO
+* hardware simu
+* time simu
+* Display
+
 ## Sources
 
 * [bgb documentation](http://bgb.bircd.org/pandocs.txt) found in http://bgb.bircd.org

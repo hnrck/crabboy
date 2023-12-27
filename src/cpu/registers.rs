@@ -79,6 +79,7 @@ impl fmt::Debug for Registers {
     }
 }
 
+#[warn(dead_code)] // TODO(henrick) part of hardware simu
 impl Registers {
     pub(crate) fn new() -> Self {
         Registers {
@@ -137,7 +138,7 @@ impl Registers {
         self.interrupts_enabled = true
     }
 
-    pub fn disable_interrupts(&mut self) {
+    pub fn _disable_interrupts(&mut self) {
         self.interrupts_enabled = false
     }
 }

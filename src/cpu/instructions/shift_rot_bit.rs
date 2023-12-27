@@ -9,7 +9,7 @@ pub(super) fn instructions_map_shift_rot_bit_instructions(instructions_map: &mut
 fn instructions_map_8_bit_shift_rot_bit_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
     instructions_map.insert(
         0x07, Instruction::new(
-            "RLCA", |registers, memory| {
+            "RLCA", |registers, _memory| {
                 let carry = (registers.a & 0x80) != 0;
                 registers.a = (registers.a << 1) | (carry as u8);
                 registers.f.z = false;
@@ -23,7 +23,7 @@ fn instructions_map_8_bit_shift_rot_bit_instructions(instructions_map: &mut Hash
 
     instructions_map.insert(
         0x17, Instruction::new(
-            "RLA", |registers, memory| {
+            "RLA", |registers, _memory| {
                 let carry = (registers.a & 0x80) != 0;
                 registers.a = (registers.a << 1) | (registers.f.c as u8);
                 registers.f.z = false;
@@ -37,7 +37,7 @@ fn instructions_map_8_bit_shift_rot_bit_instructions(instructions_map: &mut Hash
 
     instructions_map.insert(
         0x0F, Instruction::new(
-            "RRCA", |registers, memory| {
+            "RRCA", |registers, _memory| {
                 let carry = registers.a & 0x01 != 0;
                 registers.a = ((carry as u8) << 7) | (registers.a >> 1);
                 registers.f.z = false;
@@ -51,7 +51,7 @@ fn instructions_map_8_bit_shift_rot_bit_instructions(instructions_map: &mut Hash
 
     instructions_map.insert(
         0x1F, Instruction::new(
-            "RRA", |registers, memory| {
+            "RRA", |registers, _memory| {
                 let carry = registers.a & 0x01 != 0;
                 registers.a = ((registers.f.c as u8) << 7) | (registers.a >> 1);
                 registers.f.z = false;

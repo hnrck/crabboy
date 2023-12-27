@@ -976,8 +976,8 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
 }
 
 fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
-    fn unary_operation(data: u16, unary_operator: fn(u16) -> u16) -> u16 { *data = unary_operator(*data) }
-    fn binary_operation(left: u16, right: u16, flags: &mut Flags, binary_operator: fn(u16, u16, &mut Flags) -> u16) -> u16 { *left = binary_operator(*left, *right, flags) }
+    fn unary_operation(data: u16, unary_operator: fn(u16) -> u16) -> u16 { unary_operator(data) }
+    fn binary_operation(left: u16, right: u16, flags: &mut Flags, binary_operator: fn(u16, u16, &mut Flags) -> u16) -> u16 { binary_operator(left, right, flags) }
 
     fn inc_operator(data: u16) -> u16 {
         data.wrapping_add(1)
@@ -1023,7 +1023,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
 
     instructions_map.insert(
         0x34, Instruction::new(
-            "INC SP", |registers, memory| {
+            "INC SP", |registers, _memory| {
                 registers.sp = unary_operation(registers.sp, inc_operator);
                 (true, true)
             }, Cycles::new(8), 1,
@@ -1033,7 +1033,8 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
     instructions_map.insert(
         0x09, Instruction::new(
             "ADD HL, BC", |registers, _memory| {
-                registers.set_hl(binary_operation(registers.get_hl(), registers.get_bc(), &mut registers.f, add_operator));
+                let hl = binary_operation(registers.get_hl(), registers.get_bc(), &mut registers.f, add_operator);
+                registers.set_hl(hl);
                 (true, true)
             }, Cycles::new(8), 1,
         ),
@@ -1042,7 +1043,8 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
     instructions_map.insert(
         0x19, Instruction::new(
             "ADD HL, DE", |registers, _memory| {
-                registers.set_hl(binary_operation(registers.get_hl(), registers.get_de(), &mut registers.f, add_operator));
+                let hl = binary_operation(registers.get_hl(), registers.get_de(), &mut registers.f, add_operator);
+                registers.set_hl(hl);
                 (true, true)
             }, Cycles::new(8), 1,
         ),
@@ -1051,7 +1053,8 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
     instructions_map.insert(
         0x29, Instruction::new(
             "ADD HL, HL", |registers, _memory| {
-                registers.set_hl(binary_operation(registers.get_hl(), registers.get_hl(), &mut registers.f, add_operator));
+                let hl = binary_operation(registers.get_hl(), registers.get_hl(), &mut registers.f, add_operator);
+                registers.set_hl(hl);
                 (true, true)
             }, Cycles::new(8), 1,
         ),
@@ -1059,8 +1062,9 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
 
     instructions_map.insert(
         0x39, Instruction::new(
-            "ADD HL, SP", |registers, memory| {
-                registers.set_hl(binary_operation(registers.get_hl(), registers.sp, &mut registers.f, add_operator));
+            "ADD HL, SP", |registers, _memory| {
+                let hl = binary_operation(registers.get_hl(), registers.sp, &mut registers.f, add_operator);
+                registers.set_hl(hl);
                 (true, true)
             }, Cycles::new(8), 1,
         ),
@@ -1095,7 +1099,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
 
     instructions_map.insert(
         0x3B, Instruction::new(
-            "DEC SP", |registers, memory| {
+            "DEC SP", |registers, _memory| {
                 registers.sp = unary_operation(registers.sp, dec_operator);
                 (true, true)
             }, Cycles::new(8), 1,

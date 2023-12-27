@@ -162,7 +162,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x40, Instruction::new(
-            "LD B, B", |registers, memory| {
+            "LD B, B", |_registers, _memory| {
                 (true, true)
             }, Cycles::new(4), 1,
         ),
@@ -170,7 +170,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x50, Instruction::new(
-            "LD D, B", |registers, memory| {
+            "LD D, B", |registers, _memory| {
                 registers.d = registers.b;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -179,7 +179,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x60, Instruction::new(
-            "LD H, B", |registers, memory| {
+            "LD H, B", |registers, _memory| {
                 registers.h = registers.b;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -197,7 +197,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x41, Instruction::new(
-            "LD B, C", |registers, memory| {
+            "LD B, C", |registers, _memory| {
                 registers.b = registers.c;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -206,7 +206,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x51, Instruction::new(
-            "LD D, C", |registers, memory| {
+            "LD D, C", |registers, _memory| {
                 registers.d = registers.c;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -215,7 +215,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x61, Instruction::new(
-            "LD H, C", |registers, memory| {
+            "LD H, C", |registers, _memory| {
                 registers.h = registers.c;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -233,7 +233,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x42, Instruction::new(
-            "LD B, D", |registers, memory| {
+            "LD B, D", |registers, _memory| {
                 registers.b = registers.d;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -242,7 +242,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x52, Instruction::new(
-            "LD D, D", |registers, memory| {
+            "LD D, D", |_registers, _memory| {
                 (true, true)
             }, Cycles::new(4), 1,
         ),
@@ -250,7 +250,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x62, Instruction::new(
-            "LD H, D", |registers, memory| {
+            "LD H, D", |registers, _memory| {
                 registers.h = registers.d;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -268,7 +268,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x43, Instruction::new(
-            "LD B, E", |registers, memory| {
+            "LD B, E", |registers, _memory| {
                 registers.b = registers.e;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -277,7 +277,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x53, Instruction::new(
-            "LD D, E", |registers, memory| {
+            "LD D, E", |registers, _memory| {
                 registers.d = registers.e;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -286,7 +286,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x63, Instruction::new(
-            "LD H, E", |registers, memory| {
+            "LD H, E", |registers, _memory| {
                 registers.h = registers.e;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -304,7 +304,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x44, Instruction::new(
-            "LD B, H", |registers, memory| {
+            "LD B, H", |registers, _memory| {
                 registers.b = registers.h;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -313,7 +313,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x54, Instruction::new(
-            "LD D, H", |registers, memory| {
+            "LD D, H", |registers, _memory| {
                 registers.d = registers.h;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -322,7 +322,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x64, Instruction::new(
-            "LD H, H", |registers, memory| {
+            "LD H, H", |_registers, _memory| {
                 (true, true)
             }, Cycles::new(4), 1,
         ),
@@ -340,7 +340,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x45, Instruction::new(
-            "LD B, L", |registers, memory| {
+            "LD B, L", |registers, _memory| {
                 registers.b = registers.l;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -349,7 +349,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x55, Instruction::new(
-            "LD D, L", |registers, memory| {
+            "LD D, L", |registers, _memory| {
                 registers.d = registers.l;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -358,7 +358,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x65, Instruction::new(
-            "LD H, L", |registers, memory| {
+            "LD H, L", |registers, _memory| {
                 registers.h = registers.l;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -403,7 +403,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x47, Instruction::new(
-            "LD B, A", |registers, memory| {
+            "LD B, A", |registers, _memory| {
                 registers.b = registers.a;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -412,7 +412,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x57, Instruction::new(
-            "LD D, A", |registers, memory| {
+            "LD D, A", |registers, _memory| {
                 registers.d = registers.a;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -421,7 +421,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x67, Instruction::new(
-            "LD H, A", |registers, memory| {
+            "LD H, A", |registers, _memory| {
                 registers.h = registers.a;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -439,7 +439,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x48, Instruction::new(
-            "LD C, B", |registers, memory| {
+            "LD C, B", |registers, _memory| {
                 registers.c = registers.b;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -448,7 +448,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x58, Instruction::new(
-            "LD E, B", |registers, memory| {
+            "LD E, B", |registers, _memory| {
                 registers.e = registers.b;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -457,7 +457,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x68, Instruction::new(
-            "LD L, B", |registers, memory| {
+            "LD L, B", |registers, _memory| {
                 registers.l = registers.b;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -466,7 +466,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x78, Instruction::new(
-            "LD A, B", |registers, memory| {
+            "LD A, B", |registers, _memory| {
                 registers.a = registers.b;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -475,7 +475,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x49, Instruction::new(
-            "LD C, C", |registers, memory| {
+            "LD C, C", |_registers, _memory| {
                 (true, true)
             }, Cycles::new(4), 1,
         ),
@@ -483,7 +483,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x59, Instruction::new(
-            "LD E, C", |registers, memory| {
+            "LD E, C", |registers, _memory| {
                 registers.e = registers.c;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -492,7 +492,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x69, Instruction::new(
-            "LD L, C", |registers, memory| {
+            "LD L, C", |registers, _memory| {
                 registers.l = registers.c;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -501,7 +501,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x79, Instruction::new(
-            "LD A, C", |registers, memory| {
+            "LD A, C", |registers, _memory| {
                 registers.a = registers.c;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -510,7 +510,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x4A, Instruction::new(
-            "LD C, D", |registers, memory| {
+            "LD C, D", |registers, _memory| {
                 registers.c = registers.d;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -519,7 +519,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x5A, Instruction::new(
-            "LD E, D", |registers, memory| {
+            "LD E, D", |registers, _memory| {
                 registers.e = registers.d;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -528,7 +528,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x6A, Instruction::new(
-            "LD L, D", |registers, memory| {
+            "LD L, D", |registers, _memory| {
                 registers.l = registers.d;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -537,7 +537,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x7A, Instruction::new(
-            "LD A, D", |registers, memory| {
+            "LD A, D", |registers, _memory| {
                 registers.a = registers.d;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -546,7 +546,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x4B, Instruction::new(
-            "LD C, E", |registers, memory| {
+            "LD C, E", |registers, _memory| {
                 registers.c = registers.e;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -555,7 +555,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x5B, Instruction::new(
-            "LD E, E", |registers, memory| {
+            "LD E, E", |_registers, _memory| {
                 (true, true)
             }, Cycles::new(4), 1,
         ),
@@ -563,7 +563,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x6B, Instruction::new(
-            "LD L, E", |registers, memory| {
+            "LD L, E", |registers, _memory| {
                 registers.l = registers.e;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -572,7 +572,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x7B, Instruction::new(
-            "LD A, E", |registers, memory| {
+            "LD A, E", |registers, _memory| {
                 registers.a = registers.e;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -581,7 +581,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x4C, Instruction::new(
-            "LD C, H", |registers, memory| {
+            "LD C, H", |registers, _memory| {
                 registers.c = registers.h;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -590,7 +590,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x5C, Instruction::new(
-            "LD E, H", |registers, memory| {
+            "LD E, H", |registers, _memory| {
                 registers.e = registers.h;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -599,7 +599,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x6C, Instruction::new(
-            "LD L, H", |registers, memory| {
+            "LD L, H", |registers, _memory| {
                 registers.l = registers.h;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -608,7 +608,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x7C, Instruction::new(
-            "LD A, H", |registers, memory| {
+            "LD A, H", |registers, _memory| {
                 registers.a = registers.h;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -617,7 +617,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x4D, Instruction::new(
-            "LD C, L", |registers, memory| {
+            "LD C, L", |registers, _memory| {
                 registers.c = registers.l;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -626,7 +626,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x5D, Instruction::new(
-            "LD E, L", |registers, memory| {
+            "LD E, L", |registers, _memory| {
                 registers.e = registers.l;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -635,7 +635,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x6D, Instruction::new(
-            "LD L, L", |registers, memory| {
+            "LD L, L", |_registers, _memory| {
                 (true, true)
             }, Cycles::new(4), 1,
         ),
@@ -643,7 +643,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x7D, Instruction::new(
-            "LD A, L", |registers, memory| {
+            "LD A, L", |registers, _memory| {
                 registers.a = registers.c;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -688,7 +688,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x4F, Instruction::new(
-            "LD C, A", |registers, memory| {
+            "LD C, A", |registers, _memory| {
                 registers.c = registers.a;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -697,7 +697,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x5F, Instruction::new(
-            "LD E, A", |registers, memory| {
+            "LD E, A", |registers, _memory| {
                 registers.e = registers.a;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -706,7 +706,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x6F, Instruction::new(
-            "LD L, A", |registers, memory| {
+            "LD L, A", |registers, _memory| {
                 registers.l = registers.a;
                 (true, true)
             }, Cycles::new(4), 1,
@@ -715,7 +715,7 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
 
     instructions_map.insert(
         0x7F, Instruction::new(
-            "LD A, A", |registers, memory| {
+            "LD A, A", |_registers, _memory| {
                 (true, true)
             }, Cycles::new(4), 1,
         ),
