@@ -20,7 +20,6 @@ cargo run --release --package crabboy --bin crabboy -- --rom <path/to/a/homemade
 
 A lot:
 
-* `Prefix CB` implementation
 * Debug/Release
 * Logs
 * IO
