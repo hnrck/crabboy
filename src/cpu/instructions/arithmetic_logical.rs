@@ -1,15 +1,13 @@
-use std::collections::HashMap;
-
-use crate::cpu::instructions::{Cycles, Instruction};
+use crate::cpu::instructions::{Cycles, Instruction, InstructionsMap};
 use crate::cpu::registers::Flags;
 
 pub(super)
-fn instructions_map_arithmetic_logical_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_arithmetic_logical_instructions(instructions_map: &mut InstructionsMap) -> () {
     instructions_map_8_bit_arithmetic_logical_instructions(instructions_map);
     instructions_map_16_bit_arithmetic_logical_instructions(instructions_map);
 }
 
-fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut InstructionsMap) -> () {
     fn operation(flags: &mut Flags, operator: fn(&mut Flags)) { operator(flags) }
     fn unary_operation(data: u8, flags: &mut Flags, unary_operator: fn(u8, &mut Flags) -> u8) -> u8 { unary_operator(data, flags) }
     fn binary_operation(left: u8, right: u8, flags: &mut Flags, binary_operator: fn(u8, u8, &mut Flags) -> u8) -> u8 { binary_operator(left, right, flags) }
@@ -975,7 +973,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
     );
 }
 
-fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mut InstructionsMap) -> () {
     fn unary_operation(data: u16, unary_operator: fn(u16) -> u16) -> u16 { unary_operator(data) }
     fn binary_operation(left: u16, right: u16, flags: &mut Flags, binary_operator: fn(u16, u16, &mut Flags) -> u16) -> u16 { binary_operator(left, right, flags) }
 

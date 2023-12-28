@@ -1,12 +1,11 @@
-use std::collections::HashMap;
+use crate::cpu::instructions::{Cycles, Instruction, InstructionsMap};
 
-use crate::cpu::instructions::{Cycles, Instruction};
-
-pub(super) fn instructions_map_shift_rot_bit_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
-    instructions_map_8_bit_shift_rot_bit_instructions(instructions_map)
+pub(super) fn instructions_map_shift_rot_bit_instructions(instructions_map: &mut InstructionsMap, prefix_cb: &mut InstructionsMap) -> () {
+    instructions_map_8_bit_shift_rot_bit_instructions(instructions_map);
+    instructions_map_8_bit_prefix_cb_instructions(prefix_cb)
 }
 
-fn instructions_map_8_bit_shift_rot_bit_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_8_bit_shift_rot_bit_instructions(instructions_map: &mut InstructionsMap) -> () {
     instructions_map.insert(
         0x07, Instruction::new(
             "RLCA", |registers, _memory| {
@@ -64,4 +63,6 @@ fn instructions_map_8_bit_shift_rot_bit_instructions(instructions_map: &mut Hash
     );
 }
 
-// TODO(henrick) Prefix CB
+fn instructions_map_8_bit_prefix_cb_instructions(_prefix_cb: &mut InstructionsMap) -> () {
+    // TODO(henrick) Impl
+}

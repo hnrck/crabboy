@@ -1,10 +1,8 @@
-use std::collections::HashMap;
-
-use crate::cpu::instructions::{Cycles, Instruction};
+use crate::cpu::instructions::{Cycles, Instruction, InstructionsMap};
 use crate::cpu::registers::Registers;
 use crate::mmu::MMU;
 
-pub(super) fn instructions_map_jump_commands(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+pub(super) fn instructions_map_jump_commands(instructions_map: &mut InstructionsMap) -> () {
     instructions_map_jump_commands_jp(instructions_map);
     instructions_map_jump_commands_jr(instructions_map);
     instructions_map_jump_commands_ret(instructions_map);
@@ -12,7 +10,7 @@ pub(super) fn instructions_map_jump_commands(instructions_map: &mut HashMap<u8, 
     instructions_map_jump_commands_rst(instructions_map);
 }
 
-fn instructions_map_jump_commands_jp(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_jump_commands_jp(instructions_map: &mut InstructionsMap) -> () {
     fn jp(registers: &mut Registers, address: u16) { registers.pc = address }
 
     instructions_map.insert(
@@ -86,7 +84,7 @@ fn instructions_map_jump_commands_jp(instructions_map: &mut HashMap<u8, Instruct
     );
 }
 
-fn instructions_map_jump_commands_jr(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_jump_commands_jr(instructions_map: &mut InstructionsMap) -> () {
     fn jr(registers: &mut Registers, offset: i8) { registers.pc = ((registers.pc as i16) + (offset as i16)) as u16 }
 
     instructions_map.insert(
@@ -151,7 +149,7 @@ fn instructions_map_jump_commands_jr(instructions_map: &mut HashMap<u8, Instruct
     );
 }
 
-fn instructions_map_jump_commands_ret(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_jump_commands_ret(instructions_map: &mut InstructionsMap) -> () {
     fn ret(registers: &mut Registers, memory: &mut MMU) {
         let new_pc = memory.read_word(registers.sp);
         registers.sp += 2;
@@ -230,7 +228,7 @@ fn instructions_map_jump_commands_ret(instructions_map: &mut HashMap<u8, Instruc
     );
 }
 
-fn instructions_map_jump_commands_call(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_jump_commands_call(instructions_map: &mut InstructionsMap) -> () {
     fn call(registers: &mut Registers, memory: &mut MMU, address: u16) {
         registers.sp -= 2;
         memory.write_word(registers.sp, registers.pc + 3);
@@ -273,7 +271,7 @@ fn instructions_map_jump_commands_call(instructions_map: &mut HashMap<u8, Instru
     );
 }
 
-fn instructions_map_jump_commands_rst(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) -> () {
     fn rst(registers: &mut Registers, memory: &mut MMU, address: u16) {
         registers.sp -= 2;
         memory.write_word(registers.sp, registers.pc + 1);

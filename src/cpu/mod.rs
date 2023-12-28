@@ -1,6 +1,4 @@
-use std::collections::HashMap;
-
-use crate::cpu::instructions::{initialize_instructions_map, Instruction};
+use crate::cpu::instructions::{Instruction, InstructionsMapsManager};
 use crate::cpu::registers::{CpuState, Registers};
 use crate::mmu::MMU;
 
@@ -9,21 +7,27 @@ mod registers;
 
 pub(crate) struct CPU {
     registers: Registers,
-    instructions_map: HashMap<u8, Instruction>,
+    instructions_maps_manager: InstructionsMapsManager,
 }
 
 impl CPU {
     pub(crate) fn new() -> Self {
         CPU {
             registers: Registers::new(),
-            instructions_map: initialize_instructions_map(),
+            instructions_maps_manager: InstructionsMapsManager::new(),
         }
     }
 
     fn fetch(&mut self, mmu: &MMU) -> u8 { mmu.read_byte(self.registers.pc) }
 
-    fn decode(&self, byte: u8) -> Option<Instruction> {
-        self.instructions_map.get(&byte).cloned()
+    fn decode(&mut self, byte: u8) -> Option<Instruction> {
+        let instruction = self.instructions_maps_manager.get_instruction_map().get(&byte).cloned();
+        if byte == 0xCB && self.instructions_maps_manager.is_default_map() {
+            self.instructions_maps_manager.set_prefix_cb_state();
+        } else {
+            self.instructions_maps_manager.reset_state();
+        };
+        instruction
     }
 
     fn execute(&mut self, instruction: &Instruction, mmu: &mut MMU) -> (bool, u8) {

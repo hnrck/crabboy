@@ -1,9 +1,7 @@
-use std::collections::HashMap;
-
-use crate::cpu::instructions::{Cycles, Instruction};
+use crate::cpu::instructions::{Cycles, Instruction, InstructionsMap};
 use crate::cpu::registers::CpuState;
 
-pub(super) fn instructions_map_control_commands(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+pub(super) fn instructions_map_control_commands(instructions_map: &mut InstructionsMap) -> () {
     instructions_map.insert(
         0x00, Instruction::new(
             "NOP", |_registers, _memory| { (true, true) }, Cycles::new(1), 1,
@@ -28,7 +26,6 @@ pub(super) fn instructions_map_control_commands(instructions_map: &mut HashMap<u
         ),
     );
 
-    // TODO Implementation for handling extended instruction set
     instructions_map.insert(
         0xCB, Instruction::new(
             "PREFIX", |_registers, _memory| { (true, true) }, Cycles::new(1), 1,

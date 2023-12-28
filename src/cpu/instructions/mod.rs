@@ -56,14 +56,48 @@ impl Instruction {
     }
 }
 
-pub(crate) fn initialize_instructions_map() -> HashMap<u8, Instruction> {
-    let mut instructions_map = HashMap::new();
+pub(super) type InstructionsMap = HashMap<u8, Instruction>;
 
-    control::instructions_map_control_commands(&mut instructions_map);
-    jump::instructions_map_jump_commands(&mut instructions_map);
-    load::instructions_map_load_instructions(&mut instructions_map);
-    arithmetic_logical::instructions_map_arithmetic_logical_instructions(&mut instructions_map);
-    shift_rot_bit::instructions_map_shift_rot_bit_instructions(&mut instructions_map);
+pub(super) struct InstructionsMapsManager {
+    default_map: InstructionsMap,
+    prefix_cb_map: InstructionsMap,
+    state: InstructionsMapState,
+}
 
-    instructions_map
+#[derive(PartialEq)]
+enum InstructionsMapState {
+    Default,
+    PrefixCB,
+}
+
+impl InstructionsMapsManager {
+    pub(super) fn new() -> Self {
+        let mut default_map = HashMap::new(); // Initialize with your default instructions map
+        let mut prefix_cb_map = HashMap::new(); // Initialize with your prefix CB instructions map
+
+        control::instructions_map_control_commands(&mut default_map);
+        jump::instructions_map_jump_commands(&mut default_map);
+        load::instructions_map_load_instructions(&mut default_map);
+        arithmetic_logical::instructions_map_arithmetic_logical_instructions(&mut default_map);
+        shift_rot_bit::instructions_map_shift_rot_bit_instructions(&mut default_map, &mut prefix_cb_map);
+
+        InstructionsMapsManager {
+            default_map,
+            prefix_cb_map,
+            state: InstructionsMapState::Default,
+        }
+    }
+
+    pub(super) fn get_instruction_map(&mut self) -> &mut InstructionsMap {
+        match self.state {
+            InstructionsMapState::Default => &mut self.default_map,
+            InstructionsMapState::PrefixCB => &mut self.prefix_cb_map,
+        }
+    }
+
+    pub(super) fn is_default_map(&self) -> bool { self.state == InstructionsMapState::Default }
+
+    pub(super) fn set_prefix_cb_state(&mut self) { self.state = InstructionsMapState::PrefixCB }
+
+    pub(super) fn reset_state(&mut self) { self.state = InstructionsMapState::Default }
 }

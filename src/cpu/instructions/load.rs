@@ -1,15 +1,13 @@
-use std::collections::HashMap;
-
-use crate::cpu::instructions::{Cycles, Instruction};
+use crate::cpu::instructions::{Cycles, Instruction, InstructionsMap};
 use crate::cpu::registers::Registers;
 use crate::mmu::MMU;
 
-pub(super) fn instructions_map_load_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+pub(super) fn instructions_map_load_instructions(instructions_map: &mut InstructionsMap) -> () {
     instructions_map_8_bit_load_instructions(instructions_map);
     instructions_map_16_bit_load_instructions(instructions_map);
 }
 
-fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_8_bit_load_instructions(instructions_map: &mut InstructionsMap) -> () {
     instructions_map.insert(
         0x02, Instruction::new(
             "LD (BC), A", |registers, memory| {
@@ -783,13 +781,13 @@ fn instructions_map_8_bit_load_instructions(instructions_map: &mut HashMap<u8, I
     );
 }
 
-fn instructions_map_16_bit_load_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_16_bit_load_instructions(instructions_map: &mut InstructionsMap) -> () {
     instructions_map_16_bit_load_ld_instructions(instructions_map);
     instructions_map_16_bit_load_pop_instructions(instructions_map);
     instructions_map_16_bit_load_push_instructions(instructions_map);
 }
 
-fn instructions_map_16_bit_load_ld_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_16_bit_load_ld_instructions(instructions_map: &mut InstructionsMap) -> () {
     instructions_map.insert(
         0x01, Instruction::new(
             "LD BC, d16", |registers, memory| {
@@ -859,7 +857,7 @@ fn instructions_map_16_bit_load_ld_instructions(instructions_map: &mut HashMap<u
     );
 }
 
-fn instructions_map_16_bit_load_pop_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_16_bit_load_pop_instructions(instructions_map: &mut InstructionsMap) -> () {
     fn pop(registers: &mut Registers, memory: &MMU) -> u16 {
         let sp = memory.read_word(registers.sp);
         registers.sp += 2;
@@ -907,7 +905,7 @@ fn instructions_map_16_bit_load_pop_instructions(instructions_map: &mut HashMap<
     );
 }
 
-fn instructions_map_16_bit_load_push_instructions(instructions_map: &mut HashMap<u8, Instruction>) -> () {
+fn instructions_map_16_bit_load_push_instructions(instructions_map: &mut InstructionsMap) -> () {
     fn push(registers: &mut Registers, memory: &mut MMU, d16: u16) {
         memory.write_word(registers.sp, d16);
         registers.sp += 2;
