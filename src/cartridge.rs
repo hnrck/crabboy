@@ -1,3 +1,5 @@
+use log::info;
+
 pub struct CartridgeHeader {
     pub(crate) title: String,
     pub(crate) manufacturer_code: Option<String>,
@@ -188,22 +190,22 @@ impl DestinationCode {
 
 impl CartridgeHeader {
     pub(crate) fn print_info(&self) {
-        println!("ROM Header Information:");
-        println!("-----------------------");
-        println!("Title: {}", self.title);
+        info!("ROM Header Information:");
+        info!("-----------------------");
+        info!("Title: {}", self.title);
         if let Some(code) = &self.manufacturer_code {
-            println!("Manufacturer Code: {}", code);
+            info!("Manufacturer Code: {}", code);
         }
-        println!("CGB Support: {:?}", self.cgb_flag);
-        println!("New Licensee Code: {}", self.new_licensee_code);
-        println!("SGB Support: {:?}", self.sgb_flag);
-        println!("Cartridge Type: {:?}", self.cartridge_type);
-        println!("ROM Size: {:?}", self.rom_size);
-        println!("RAM Size: {:?}", self.ram_size);
-        println!("Destination Code: {:?}", self.destination_code);
-        println!("Old Licensee Code: {}", self.old_licensee_code);
-        println!("ROM Version: {}", self.rom_version);
-        println!("Header Checksum: {:02X}", self.header_checksum);
-        println!("Global Checksum: {:04X}", self.global_checksum);
+        info!("CGB Support: {:?}", self.cgb_flag);
+        info!("New Licensee Code: {}", self.new_licensee_code);
+        info!("SGB Support: {:?}", self.sgb_flag);
+        info!("Cartridge Type: {:?}", self.cartridge_type);
+        info!("ROM Size: {:?}", self.rom_size);
+        info!("RAM Size: {:?}", self.ram_size);
+        info!("Destination Code: {:?}", self.destination_code);
+        info!("Old Licensee Code: {}", self.old_licensee_code);
+        info!("ROM Version: {}", self.rom_version);
+        info!("Header Checksum: {:02X}", self.header_checksum);
+        info!("Global Checksum: {:04X}", self.global_checksum);
     }
 }

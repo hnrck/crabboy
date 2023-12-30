@@ -6,3 +6,5 @@ description = "GB emulator in rust, based on bgb documentation found in http://b
 
 [dependencies]
 clap = { version = "4.4.6", features = ["derive"] }
+log = "0.4.20"
+env_logger = "0.10.1"

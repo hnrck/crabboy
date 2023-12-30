@@ -1,3 +1,5 @@
+use log::{debug, error};
+
 use crate::cpu::instructions::{Instruction, InstructionsMapsManager};
 use crate::cpu::registers::{CpuState, Registers};
 use crate::mmu::MMU;
@@ -39,25 +41,29 @@ impl CPU {
     }
 
     pub(crate) fn step(&mut self, mmu: &mut MMU) {
-        println!("{:?}", self.registers);
+        debug!("{:?}", self.registers);
 
         if self.registers.cpu_state == CpuState::Running {
             let pc = self.registers.pc;
             let byte = self.fetch(mmu);
-            println!("Fetch:   @0x{:0>4x} -> 0x{:0>2x}", pc, byte);
+            debug!("Fetch:   @0x{:0>4x} -> 0x{:0>2x}", pc, byte);
 
-            let instruction = self.decode(byte).expect("Unknown instruction");
-            println!("Decode:  0x{:0>2x} = {:?}", byte, instruction.mnemonic);
+            let instruction = match self.decode(byte) {
+                Some(instruction) => instruction,
+                None => {
+                    error!("Fatal: Unknown instruction for byte 0x{:0>2x}", byte);
+                    std::process::exit(1);
+                }
+            };
+            debug!("Decode:  0x{:0>2x} = {:?}", byte, instruction.mnemonic);
 
             let (pc_update, cycles) = self.execute(&instruction, mmu);
 
-            println!("Execute: {:?} : {} cycles", instruction.mnemonic, cycles);
+            debug!("Execute: {:?} : {} cycles", instruction.mnemonic, cycles);
 
             if pc_update {
                 self.registers.pc += instruction.bytes as u16;
             }
         }
-
-        println!("---");
     }
 }

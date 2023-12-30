@@ -1,4 +1,7 @@
+use std::process;
+
 use clap::Parser;
+use log::{debug, error};
 
 use crate::cpu::CPU;
 use crate::mmu::MMU;
@@ -17,18 +20,43 @@ struct Opt {
     rom: String,
 }
 
+#[cfg(debug_assertions)]
+fn init_logger() {
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Debug)
+        .init();
+}
+
+#[cfg(not(debug_assertions))]
+fn init_logger() {
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .init();
+}
+
 fn main() {
+    init_logger();
     let opt = Opt::parse();
     let rom_path: &String = &opt.rom;
-
-    let rom: Rom = Rom::from_path(&rom_path).expect("Failed to load ROM");
-    if !rom.validate() {
-        panic!("Invalid ROM!");
-    }
-    rom.print_info();
-    let mut mmu = MMU::new().with_rom(rom);
-    let mut cpu = CPU::new();
-    loop {
-        cpu.step(&mut mmu);
+    match Rom::from_path(&rom_path) {
+        Ok(rom) => {
+            if rom.validate() {
+                debug!("ROM loaded and validated successfully");
+                rom.print_info();
+                let mut mmu = MMU::new().with_rom(rom);
+                let mut cpu = CPU::new();
+                loop {
+                    // TODO(henrick) Step error handling
+                    cpu.step(&mut mmu);
+                }
+            } else {
+                error!("Invalid ROM!");
+                process::exit(1);
+            }
+        }
+        Err(err) => {
+            error!("Failed to load ROM: {}", err);
+            process::exit(1);
+        }
     }
 }

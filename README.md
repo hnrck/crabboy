@@ -20,8 +20,6 @@ cargo run --release --package crabboy --bin crabboy -- --rom <path/to/a/homemade
 
 A lot:
 
-* Debug/Release
-* Logs
 * IO
 * hardware simu
 * time simu
