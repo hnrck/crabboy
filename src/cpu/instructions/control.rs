@@ -1,10 +1,10 @@
-use crate::cpu::instructions::{Cycles, Instruction, InstructionsMap};
+use crate::cpu::instructions::{Cycles, ExecutionResult, Instruction, InstructionsMap};
 use crate::cpu::registers::CpuState;
 
 pub(super) fn instructions_map_control_commands(instructions_map: &mut InstructionsMap) -> () {
     instructions_map.insert(
         0x00, Instruction::new(
-            "NOP", |_registers, _memory| { (true, true) }, Cycles::new(1), 1,
+            "NOP", |_registers, _memory| { ExecutionResult::default() }, Cycles::new(1), 1,
         ),
     );
 
@@ -12,7 +12,7 @@ pub(super) fn instructions_map_control_commands(instructions_map: &mut Instructi
         0x10, Instruction::new(
             "STOP", |registers, _memory| {
                 registers.cpu_state = CpuState::Stopped;
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(2), 1,
         ),
     );
@@ -21,14 +21,14 @@ pub(super) fn instructions_map_control_commands(instructions_map: &mut Instructi
         0x76, Instruction::new(
             "HALT", |registers, _memory| {
                 registers.cpu_state = CpuState::Halted;
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(1), 1,
         ),
     );
 
     instructions_map.insert(
         0xCB, Instruction::new(
-            "PREFIX", |_registers, _memory| { (true, true) }, Cycles::new(1), 1,
+            "PREFIX", |_registers, _memory| { ExecutionResult::default() }, Cycles::new(1), 1,
         ),
     );
 
@@ -36,7 +36,7 @@ pub(super) fn instructions_map_control_commands(instructions_map: &mut Instructi
         0xF3, Instruction::new(
             "DI", |registers, _memory| {
                 registers.interrupts_enabled = false;
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(1), 1,
         ),
     );
@@ -45,7 +45,7 @@ pub(super) fn instructions_map_control_commands(instructions_map: &mut Instructi
         0xFB, Instruction::new(
             "EI", |registers, _memory| {
                 registers.interrupts_enabled = true;
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(1), 1,
         ),
     );

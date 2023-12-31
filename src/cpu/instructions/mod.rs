@@ -9,11 +9,37 @@ mod load;
 mod arithmetic_logical;
 mod shift_rot_bit;
 
-// return (true, _) if pc have to be updated, i.e. pc += instruction.bytes
-// return (false, _) if pc should not be updated, i.e. pc += 0
-// return (_, true) if action was taken, i.e. cycles += instruction.cycles.taken
-// return (_, false) if action was not taken, i.e. cycles += instruction.cycles.not_taken
-pub type ExecuteFn = fn(&mut Registers, &mut MMU) -> (bool, bool);
+pub struct ExecutionResult {
+    pub update_pc: bool,
+    pub action_taken: bool,
+}
+
+impl Default for ExecutionResult {
+    fn default() -> Self {
+        ExecutionResult {
+            update_pc: true,
+            action_taken: true,
+        }
+    }
+}
+
+impl ExecutionResult {
+    fn without_pc_update(self) -> Self {
+        ExecutionResult {
+            update_pc: false,
+            ..self
+        }
+    }
+
+    fn without_action(self) -> Self {
+        ExecutionResult {
+            action_taken: false,
+            ..self
+        }
+    }
+}
+
+pub type ExecuteFn = fn(&mut Registers, &mut MMU) -> ExecutionResult;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub(crate) struct Cycles {

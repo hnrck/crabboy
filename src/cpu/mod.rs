@@ -44,10 +44,10 @@ impl CPU {
     }
 
     fn execute(&mut self, instruction: &Instruction, mmu: &mut MMU) -> (bool, u8) {
-        let (pc_update, action_taken) = (instruction.execute)(&mut self.registers, mmu);
-        match action_taken {
-            true => (pc_update, instruction.cycles.taken),
-            false => (pc_update, instruction.cycles.not_taken),
+        let result = (instruction.execute)(&mut self.registers, mmu);
+        match result.action_taken {
+            true => (result.update_pc, instruction.cycles.taken),
+            false => (result.update_pc, instruction.cycles.not_taken),
         }
     }
 

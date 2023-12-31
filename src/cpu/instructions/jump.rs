@@ -1,4 +1,4 @@
-use crate::cpu::instructions::{Cycles, Instruction, InstructionsMap};
+use crate::cpu::instructions::{Cycles, ExecutionResult, Instruction, InstructionsMap};
 use crate::cpu::registers::Registers;
 use crate::mmu::MMU;
 
@@ -18,9 +18,9 @@ fn instructions_map_jump_commands_jp(instructions_map: &mut InstructionsMap) -> 
             "JP NZ, a16", |registers, memory| {
                 if !registers.f.z {
                     jp(registers, memory.read_word(registers.pc + 1));
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(16).with_not_taken(12), 3,
         ),
@@ -30,7 +30,7 @@ fn instructions_map_jump_commands_jp(instructions_map: &mut InstructionsMap) -> 
         0xc3, Instruction::new(
             "JP a16", |registers, memory| {
                 jp(registers, memory.read_word(registers.pc + 1));
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 3,
         ),
     );
@@ -40,9 +40,9 @@ fn instructions_map_jump_commands_jp(instructions_map: &mut InstructionsMap) -> 
             "JP Z, a16", |registers, memory| {
                 if registers.f.z {
                     jp(registers, memory.read_word(registers.pc + 1));
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(16).with_not_taken(12), 3,
         ),
@@ -53,9 +53,9 @@ fn instructions_map_jump_commands_jp(instructions_map: &mut InstructionsMap) -> 
             "JP NC, a16", |registers, memory| {
                 if !registers.f.c {
                     jp(registers, memory.read_word(registers.pc + 1));
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(16).with_not_taken(12), 3,
         ),
@@ -66,9 +66,9 @@ fn instructions_map_jump_commands_jp(instructions_map: &mut InstructionsMap) -> 
             "JP C, a16", |registers, memory| {
                 if registers.f.c {
                     jp(registers, memory.read_word(registers.pc + 1));
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(16).with_not_taken(12), 3,
         ),
@@ -78,7 +78,7 @@ fn instructions_map_jump_commands_jp(instructions_map: &mut InstructionsMap) -> 
         0xe9, Instruction::new(
             "JP (HL)", |registers, memory| {
                 jp(registers, memory.read_word(registers.get_hl()));
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(4), 1,
         ),
     );
@@ -91,7 +91,7 @@ fn instructions_map_jump_commands_jr(instructions_map: &mut InstructionsMap) -> 
         0x18, Instruction::new(
             "JR, r8", |registers, memory| {
                 jr(registers, memory.read_byte(registers.pc + 1) as i8);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(12), 2,
         ),
     );
@@ -101,9 +101,9 @@ fn instructions_map_jump_commands_jr(instructions_map: &mut InstructionsMap) -> 
             "JR NZ, r8", |registers, memory| {
                 if !registers.f.z {
                     jr(registers, memory.read_byte(registers.pc + 1) as i8);
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(12).with_not_taken(8), 2,
         ),
@@ -114,9 +114,9 @@ fn instructions_map_jump_commands_jr(instructions_map: &mut InstructionsMap) -> 
             "JR Z, r8", |registers, memory| {
                 if registers.f.z {
                     jr(registers, memory.read_byte(registers.pc + 1) as i8);
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(12).with_not_taken(8), 2,
         ),
@@ -127,9 +127,9 @@ fn instructions_map_jump_commands_jr(instructions_map: &mut InstructionsMap) -> 
             "JR NC, r8", |registers, memory| {
                 if !registers.f.c {
                     jr(registers, memory.read_byte(registers.pc + 1) as i8);
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(12).with_not_taken(8), 2,
         ),
@@ -140,9 +140,9 @@ fn instructions_map_jump_commands_jr(instructions_map: &mut InstructionsMap) -> 
             "JR C, r8", |registers, memory| {
                 if registers.f.c {
                     jr(registers, memory.read_byte(registers.pc + 1) as i8);
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(12).with_not_taken(8), 2,
         ),
@@ -160,7 +160,7 @@ fn instructions_map_jump_commands_ret(instructions_map: &mut InstructionsMap) ->
         0xc9, Instruction::new(
             "RET", |registers, memory| {
                 ret(registers, memory);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -170,7 +170,7 @@ fn instructions_map_jump_commands_ret(instructions_map: &mut InstructionsMap) ->
             "RETI", |registers, memory| {
                 ret(registers, memory);
                 registers.enable_interrupts();
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -180,9 +180,9 @@ fn instructions_map_jump_commands_ret(instructions_map: &mut InstructionsMap) ->
             "RET NZ", |registers, memory| {
                 if !registers.f.z {
                     ret(registers, memory);
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(20).with_not_taken(8), 1,
         ),
@@ -193,9 +193,9 @@ fn instructions_map_jump_commands_ret(instructions_map: &mut InstructionsMap) ->
             "RET Z", |registers, memory| {
                 if registers.f.z {
                     ret(registers, memory);
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(20).with_not_taken(8), 1,
         ),
@@ -206,9 +206,9 @@ fn instructions_map_jump_commands_ret(instructions_map: &mut InstructionsMap) ->
             "RET NC", |registers, memory| {
                 if !registers.f.c {
                     ret(registers, memory);
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(20).with_not_taken(8), 1,
         ),
@@ -219,9 +219,9 @@ fn instructions_map_jump_commands_ret(instructions_map: &mut InstructionsMap) ->
             "RET C", |registers, memory| {
                 if registers.f.c {
                     ret(registers, memory);
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(20).with_not_taken(8), 1,
         ),
@@ -239,7 +239,7 @@ fn instructions_map_jump_commands_call(instructions_map: &mut InstructionsMap) -
         0xcd, Instruction::new(
             "CALL a16", |registers, memory| {
                 call(registers, memory, memory.read_word(registers.pc + 1));
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(24), 3,
         ),
     );
@@ -249,9 +249,9 @@ fn instructions_map_jump_commands_call(instructions_map: &mut InstructionsMap) -
             "CALL Z, a16", |registers, memory| {
                 if registers.f.z {
                     call(registers, memory, memory.read_word(registers.pc + 1));
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(24).with_not_taken(12), 3,
         ),
@@ -262,9 +262,9 @@ fn instructions_map_jump_commands_call(instructions_map: &mut InstructionsMap) -
             "CALL C, a16", |registers, memory| {
                 if registers.f.c {
                     call(registers, memory, memory.read_word(registers.pc + 1));
-                    (false, true)
+                    ExecutionResult::default().without_pc_update()
                 } else {
-                    (true, false)
+                    ExecutionResult::default().without_action()
                 }
             }, Cycles::new(24).with_not_taken(12), 3,
         ),
@@ -282,7 +282,7 @@ fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) ->
         0xc7, Instruction::new(
             "RST 00H", |registers, memory| {
                 rst(registers, memory, 0x00);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -291,7 +291,7 @@ fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) ->
         0xd7, Instruction::new(
             "RST 10H", |registers, memory| {
                 rst(registers, memory, 0x10);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -300,7 +300,7 @@ fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) ->
         0xe7, Instruction::new(
             "RST 20H", |registers, memory| {
                 rst(registers, memory, 0x20);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -309,7 +309,7 @@ fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) ->
         0xf7, Instruction::new(
             "RST 30H", |registers, memory| {
                 rst(registers, memory, 0x30);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -318,7 +318,7 @@ fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) ->
         0xcf, Instruction::new(
             "RST 08H", |registers, memory| {
                 rst(registers, memory, 0x08);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -327,7 +327,7 @@ fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) ->
         0xdf, Instruction::new(
             "RST 18H", |registers, memory| {
                 rst(registers, memory, 0x18);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -336,7 +336,7 @@ fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) ->
         0xef, Instruction::new(
             "RST 28H", |registers, memory| {
                 rst(registers, memory, 0x28);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );
@@ -345,7 +345,7 @@ fn instructions_map_jump_commands_rst(instructions_map: &mut InstructionsMap) ->
         0xff, Instruction::new(
             "RST 38H", |registers, memory| {
                 rst(registers, memory, 0x38);
-                (false, true)
+                ExecutionResult::default().without_pc_update()
             }, Cycles::new(16), 1,
         ),
     );

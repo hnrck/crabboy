@@ -1,4 +1,4 @@
-use crate::cpu::instructions::{Cycles, Instruction, InstructionsMap};
+use crate::cpu::instructions::{Cycles, ExecutionResult, Instruction, InstructionsMap};
 use crate::cpu::registers::Flags;
 
 pub(super)
@@ -148,7 +148,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x04, Instruction::new(
             "INC B", |registers, _memory| {
                 registers.b = unary_operation(registers.b, &mut registers.f, inc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -157,7 +157,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x14, Instruction::new(
             "INC D", |registers, _memory| {
                 registers.d = unary_operation(registers.d, &mut registers.f, inc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -166,7 +166,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x24, Instruction::new(
             "INC H", |registers, _memory| {
                 registers.h = unary_operation(registers.h, &mut registers.f, inc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -175,7 +175,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x34, Instruction::new(
             "INC (HL)", |registers, memory| {
                 memory.write_byte(registers.get_bc(), unary_operation(memory.read_byte(registers.get_bc()), &mut registers.f, inc_operator));
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(12), 1,
         ),
     );
@@ -184,7 +184,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x0C, Instruction::new(
             "INC C", |registers, _memory| {
                 registers.c = unary_operation(registers.c, &mut registers.f, inc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -193,7 +193,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x1C, Instruction::new(
             "INC E", |registers, _memory| {
                 registers.e = unary_operation(registers.e, &mut registers.f, inc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -202,7 +202,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x2C, Instruction::new(
             "INC L", |registers, _memory| {
                 registers.l = unary_operation(registers.l, &mut registers.f, inc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -211,7 +211,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x3C, Instruction::new(
             "INC A", |registers, _memory| {
                 registers.a = unary_operation(registers.a, &mut registers.f, inc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -220,7 +220,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x05, Instruction::new(
             "DEC B", |registers, _memory| {
                 registers.b = unary_operation(registers.b, &mut registers.f, dec_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -229,7 +229,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x15, Instruction::new(
             "DEC D", |registers, _memory| {
                 registers.d = unary_operation(registers.d, &mut registers.f, dec_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -238,7 +238,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x25, Instruction::new(
             "DEC L", |registers, _memory| {
                 registers.l = unary_operation(registers.l, &mut registers.f, dec_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -247,7 +247,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x35, Instruction::new(
             "DEC (HL)", |registers, memory| {
                 memory.write_byte(registers.get_bc(), unary_operation(memory.read_byte(registers.get_bc()), &mut registers.f, inc_operator));
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(12), 1,
         ),
     );
@@ -256,7 +256,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x0D, Instruction::new(
             "DEC C", |registers, _memory| {
                 registers.c = unary_operation(registers.c, &mut registers.f, dec_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -265,7 +265,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x1D, Instruction::new(
             "DEC E", |registers, _memory| {
                 registers.e = unary_operation(registers.e, &mut registers.f, dec_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -274,7 +274,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x2D, Instruction::new(
             "DEC L", |registers, _memory| {
                 registers.l = unary_operation(registers.l, &mut registers.f, dec_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -283,7 +283,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x3D, Instruction::new(
             "DEC A", |registers, _memory| {
                 registers.a = unary_operation(registers.a, &mut registers.f, dec_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -292,7 +292,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x27, Instruction::new(
             "DAA", |registers, _memory| {
                 registers.a = unary_operation(registers.a, &mut registers.f, daa_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -301,7 +301,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x37, Instruction::new(
             "SCF", |registers, _memory| {
                 operation(&mut registers.f, scf_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -310,7 +310,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x2F, Instruction::new(
             "CPL", |registers, _memory| {
                 registers.a = unary_operation(registers.a, &mut registers.f, cpl_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -319,7 +319,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x3F, Instruction::new(
             "CCF", |registers, _memory| {
                 operation(&mut registers.f, ccf_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -328,7 +328,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x80, Instruction::new(
             "ADD A, B", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.b, &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -337,7 +337,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x81, Instruction::new(
             "ADD A, C", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.c, &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -346,7 +346,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x82, Instruction::new(
             "ADD A, D", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.d, &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -355,7 +355,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x83, Instruction::new(
             "ADD A, E", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.e, &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -364,7 +364,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x84, Instruction::new(
             "ADD A, H", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.h, &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -373,7 +373,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x85, Instruction::new(
             "ADD A, L", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.l, &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -382,7 +382,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x86, Instruction::new(
             "ADD A, (HL)", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.get_hl()), &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -391,7 +391,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x87, Instruction::new(
             "ADD A, A", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.a, &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -400,7 +400,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x88, Instruction::new(
             "ADC A, B", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.b, &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -409,7 +409,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x89, Instruction::new(
             "ADC A, C", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.c, &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -418,7 +418,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x8A, Instruction::new(
             "ADC A, D", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.d, &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -427,7 +427,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x8B, Instruction::new(
             "ADC A, E", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.e, &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -436,7 +436,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x8C, Instruction::new(
             "ADC A, H", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.h, &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -445,7 +445,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x8D, Instruction::new(
             "ADC A, L", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.l, &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -454,7 +454,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x8E, Instruction::new(
             "ADC A, (HL)", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.get_hl()), &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -463,7 +463,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x8F, Instruction::new(
             "ADC A, A", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.a, &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -472,7 +472,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x90, Instruction::new(
             "SUB A, B", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.b, &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -481,7 +481,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x91, Instruction::new(
             "SUB A, C", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.c, &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -490,7 +490,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x92, Instruction::new(
             "SUB A, D", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.d, &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -499,7 +499,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x93, Instruction::new(
             "SUB A, E", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.e, &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -508,7 +508,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x94, Instruction::new(
             "SUB A, H", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.h, &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -517,7 +517,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x95, Instruction::new(
             "SUB A, L", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.l, &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -526,7 +526,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x96, Instruction::new(
             "SUB A, (HL)", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.get_hl()), &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -535,7 +535,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x97, Instruction::new(
             "SUB A, A", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.a, &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -544,7 +544,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x98, Instruction::new(
             "SBC A, B", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.b, &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -553,7 +553,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x99, Instruction::new(
             "SBC A, C", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.c, &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -562,7 +562,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x9A, Instruction::new(
             "SBC A, D", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.d, &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -571,7 +571,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x9B, Instruction::new(
             "SBC A, E", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.e, &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -580,7 +580,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x9C, Instruction::new(
             "SBC A, H", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.h, &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -589,7 +589,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x9D, Instruction::new(
             "SBC A, L", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.l, &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -598,7 +598,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x9E, Instruction::new(
             "SBC A, (HL)", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.get_hl()), &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -607,7 +607,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0x9F, Instruction::new(
             "SBC A, A", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.a, &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -616,7 +616,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA0, Instruction::new(
             "AND A, B", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.b, &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -625,7 +625,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA1, Instruction::new(
             "AND A, C", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.c, &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -634,7 +634,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA2, Instruction::new(
             "AND A, D", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.d, &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -643,7 +643,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA3, Instruction::new(
             "AND A, E", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.e, &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -652,7 +652,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA4, Instruction::new(
             "AND A, H", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.h, &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -661,7 +661,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA5, Instruction::new(
             "AND A, L", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.l, &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -670,7 +670,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA6, Instruction::new(
             "AND A, (HL)", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.get_hl()), &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -679,7 +679,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA7, Instruction::new(
             "AND A, A", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.a, &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -688,7 +688,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA8, Instruction::new(
             "XOR A, B", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.b, &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -697,7 +697,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xA9, Instruction::new(
             "XOR A, C", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.c, &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -706,7 +706,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xAA, Instruction::new(
             "XOR A, D", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.d, &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -715,7 +715,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xAB, Instruction::new(
             "XOR A, E", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.e, &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -724,7 +724,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xAC, Instruction::new(
             "XOR A, H", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.h, &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -733,7 +733,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xAD, Instruction::new(
             "XOR A, L", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.l, &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -742,7 +742,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xAE, Instruction::new(
             "XOR A, (HL)", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.get_hl()), &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -751,7 +751,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xAF, Instruction::new(
             "XOR A, A", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.a, &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -760,7 +760,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB0, Instruction::new(
             "OR A, B", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.b, &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -769,7 +769,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB1, Instruction::new(
             "OR A, C", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.c, &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -778,7 +778,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB2, Instruction::new(
             "OR A, D", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.d, &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -787,7 +787,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB3, Instruction::new(
             "OR A, E", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.e, &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -796,7 +796,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB4, Instruction::new(
             "OR A, H", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.h, &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -805,7 +805,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB5, Instruction::new(
             "OR A, L", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.l, &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -814,7 +814,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB6, Instruction::new(
             "OR A, (HL)", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.get_hl()), &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -823,7 +823,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB7, Instruction::new(
             "OR A, A", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.a, &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -832,7 +832,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB8, Instruction::new(
             "CP A, B", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.b, &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -841,7 +841,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xB9, Instruction::new(
             "CP A, C", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.c, &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -850,7 +850,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xBA, Instruction::new(
             "CP A, D", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.d, &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -859,7 +859,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xBB, Instruction::new(
             "CP A, E", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.e, &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -868,7 +868,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xBC, Instruction::new(
             "CP A, H", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.h, &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -877,7 +877,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xBD, Instruction::new(
             "CP A, L", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.l, &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -886,7 +886,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xBE, Instruction::new(
             "CP A, (HL)", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.get_hl()), &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -895,7 +895,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xBF, Instruction::new(
             "CP A, A", |registers, _memory| {
                 registers.a = binary_operation(registers.a, registers.a, &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(4), 1,
         ),
     );
@@ -904,7 +904,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xC6, Instruction::new(
             "ADD A, d8", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.pc + 1), &mut registers.f, add_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 2,
         ),
     );
@@ -913,7 +913,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xD6, Instruction::new(
             "SUB A, d8", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.pc + 1), &mut registers.f, sub_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 2,
         ),
     );
@@ -922,7 +922,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xE6, Instruction::new(
             "AND A, d8", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.pc + 1), &mut registers.f, and_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 2,
         ),
     );
@@ -931,7 +931,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xF6, Instruction::new(
             "OR A, d8", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.pc + 1), &mut registers.f, or_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 2,
         ),
     );
@@ -940,7 +940,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xCE, Instruction::new(
             "ADC A, d8", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.pc + 1), &mut registers.f, adc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 2,
         ),
     );
@@ -949,7 +949,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xDE, Instruction::new(
             "SBC A, d8", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.pc + 1), &mut registers.f, sbc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 2,
         ),
     );
@@ -958,7 +958,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xEE, Instruction::new(
             "XOR A, d8", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.pc + 1), &mut registers.f, xor_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 2,
         ),
     );
@@ -967,7 +967,7 @@ fn instructions_map_8_bit_arithmetic_logical_instructions(instructions_map: &mut
         0xFE, Instruction::new(
             "CP A, d8", |registers, memory| {
                 registers.a = binary_operation(registers.a, memory.read_byte(registers.pc + 1), &mut registers.f, cp_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 2,
         ),
     );
@@ -996,7 +996,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
         0x04, Instruction::new(
             "INC BC", |registers, _memory| {
                 registers.set_bc(unary_operation(registers.get_bc(), inc_operator));
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1005,7 +1005,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
         0x14, Instruction::new(
             "INC DE", |registers, _memory| {
                 registers.set_de(unary_operation(registers.get_de(), inc_operator));
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1014,7 +1014,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
         0x24, Instruction::new(
             "INC HL", |registers, _memory| {
                 registers.set_hl(unary_operation(registers.get_hl(), inc_operator));
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1023,7 +1023,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
         0x34, Instruction::new(
             "INC SP", |registers, _memory| {
                 registers.sp = unary_operation(registers.sp, inc_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1033,7 +1033,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
             "ADD HL, BC", |registers, _memory| {
                 let hl = binary_operation(registers.get_hl(), registers.get_bc(), &mut registers.f, add_operator);
                 registers.set_hl(hl);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1043,7 +1043,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
             "ADD HL, DE", |registers, _memory| {
                 let hl = binary_operation(registers.get_hl(), registers.get_de(), &mut registers.f, add_operator);
                 registers.set_hl(hl);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1053,7 +1053,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
             "ADD HL, HL", |registers, _memory| {
                 let hl = binary_operation(registers.get_hl(), registers.get_hl(), &mut registers.f, add_operator);
                 registers.set_hl(hl);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1063,7 +1063,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
             "ADD HL, SP", |registers, _memory| {
                 let hl = binary_operation(registers.get_hl(), registers.sp, &mut registers.f, add_operator);
                 registers.set_hl(hl);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1072,7 +1072,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
         0x0B, Instruction::new(
             "DEC BC", |registers, _memory| {
                 registers.set_bc(unary_operation(registers.get_bc(), dec_operator));
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1081,7 +1081,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
         0x1B, Instruction::new(
             "DEC DE", |registers, _memory| {
                 registers.set_de(unary_operation(registers.get_de(), dec_operator));
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1090,7 +1090,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
         0x2B, Instruction::new(
             "DEC HL", |registers, _memory| {
                 registers.set_hl(unary_operation(registers.get_hl(), dec_operator));
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
@@ -1099,7 +1099,7 @@ fn instructions_map_16_bit_arithmetic_logical_instructions(instructions_map: &mu
         0x3B, Instruction::new(
             "DEC SP", |registers, _memory| {
                 registers.sp = unary_operation(registers.sp, dec_operator);
-                (true, true)
+                ExecutionResult::default()
             }, Cycles::new(8), 1,
         ),
     );
