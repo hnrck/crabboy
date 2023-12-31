@@ -1,4 +1,7 @@
-use log::{debug, error};
+use std::thread;
+use std::time::{Duration, Instant};
+
+use log::{debug, error, warn};
 
 use crate::cpu::instructions::{Instruction, InstructionsMapsManager};
 use crate::cpu::registers::{CpuState, Registers};
@@ -6,6 +9,14 @@ use crate::mmu::MMU;
 
 mod instructions;
 mod registers;
+
+fn cycles_to_time(cycles: u8) -> Duration {
+    let clock_speed = 4_194_304.0;
+    let time = cycles as f64 / clock_speed;
+    let seconds = time.floor() as u64;
+    let nanoseconds = ((time - seconds as f64) * 1_000_000_000.0) as u32;
+    Duration::new(seconds, nanoseconds)
+}
 
 pub(crate) struct CPU {
     registers: Registers,
@@ -44,6 +55,7 @@ impl CPU {
         debug!("{:?}", self.registers);
 
         if self.registers.cpu_state == CpuState::Running {
+            let start_time = Instant::now();
             let pc = self.registers.pc;
             let byte = self.fetch(mmu);
             debug!("Fetch:   @0x{:0>4x} -> 0x{:0>2x}", pc, byte);
@@ -63,6 +75,15 @@ impl CPU {
 
             if pc_update {
                 self.registers.pc += instruction.bytes as u16;
+            }
+            let cur_time = Instant::now();
+            let delta_time = cur_time - start_time;
+            let step_duration = cycles_to_time(cycles);
+            if step_duration < delta_time {
+                warn!("Overshoot: {} ns > {} ns", delta_time.as_nanos(), step_duration.as_nanos());
+            } else {
+                let wait_for = step_duration - delta_time;
+                thread::sleep(wait_for);
             }
         }
     }
